@@ -5,7 +5,10 @@
         <title>ACM服务外包协同创新团队-首页</title>
         <style>
 
-           *{margin: 0px;}
+           *{
+               margin: 0px;
+               padding: 0px;
+            }
            #one
            {
                height: 30px;
@@ -66,7 +69,219 @@
             }
         
             
+            #outer
+            {  
+                width: 1020px;
+                height: 666px;
+                margin: 0 auto;
+                position: relative;
+                overflow: hidden;
+
+            }
+
+            #imgs
+            {
+                  list-style: none;
+                  width: 4080px; ;
+                  height: 666px;
+                  position: absolute;
+                  left: 0px;
+            }
+
+            #imgs li
+            {
+                 float: left;
+                 margin: 0 10px;
+            
+            }
+
+            #nav
+            {
+                position: absolute;
+                bottom: 15px;
+                left: 472px;
+
+            }
+
+
+            #nav a
+            {
+                float: left;
+                width: 15px;
+                height: 15px;    
+                background-color: red;
+                margin: 0 5px;
+                opacity: 50%;
+                border-radius: 50%;
+
+            }
+
+
+            #nav a:hover
+            {
+                background-color: black;
+            }
+            
         </style>
+
+
+        <script type="text/javascript">
+           
+                window.onload=function()
+                {
+                        
+                        /*点击超链接切换图片*/
+                        var nav=document.getElementById("nav");
+                        var allA=nav.getElementsByTagName("a");
+                        var imgs=document.getElementById("imgs");
+
+                        allA[0].style.backgroundColor="black";
+                        
+                        var index=0;   /*记录当前图片的索引*/
+                        var timer;
+
+                        for(i=0;i<allA.length;i++)
+                        {
+                              allA[i].num=i; 
+                               
+
+                              allA[i].onclick=function(){
+                                     
+                                    clearInterval(timer)   /*点的时候取消自动播放*/ 
+                                    index=this.num;             /*这样就可以知道点击的是第几张图片*/
+                               
+                                    setA();
+                                    
+                                    move(imgs,"left",-1020*index,10,function(){autochange();}); /*执行完打开自动播放*/ 
+                                     
+                              }; 
+
+
+                        }
+
+                        /*自动切换图片*/
+                        autochange();
+                         
+
+                        function setA()
+                        {
+                            if(index==3)          /*到达第4张图片（营造视觉效果好像在第一张）*/
+                            {
+                                index=0;                  /*改变导航索引*/
+                                imgs.style.left=0+"px";   /*回到第一张*/
+                            }     
+
+                             for(i=0;i<allA.length;i++) 
+                             {
+                                 allA[i].style.backgroundColor="";
+                             }
+                             allA[index].style.backgroundColor="black";
+
+
+                        }
+
+                          
+                       function getstyle(obj,name)
+                       {
+                             if(window.getComputedStyle)
+                             {
+                                /*正常浏览器*/
+                                 return getComputedStyle(obj,null)[name];
+                             }
+                             else
+                             {
+                                 /*IE8*/
+                                 return obj.currentStyle[name];
+                             }
+ 
+
+                       } 
+
+
+                         
+                        function move(obj,attr,target,speed,callback)
+                        {
+
+                             clearInterval(obj.timer);
+
+                             var current=parseInt(getstyle(obj,attr));
+
+                             if(current>target)
+                             {
+                                 speed=-speed;
+                             }
+
+                             obj.timer=setInterval(function(){
+
+                                    var oldvalue=parseInt(getstyle(obj,attr));
+                                    var newvalue=oldvalue+speed;
+
+                                    if((newvalue>target&&speed>0)||(newvalue<target&&speed<0))
+                                    {
+                                          newvalue=target;
+                                    }
+
+                                     obj.style[attr]=newvalue+"px";
+
+                                     if(newvalue==target)
+                                     {
+                                         clearInterval(obj.timer);
+                                         callback();
+                                     }
+
+
+
+                             },5);
+
+
+                        }
+                    
+                         
+                        function autochange()
+                        {
+
+                            timer=setInterval(function(){
+
+                              /*切换图片就是改变索引*/
+                              index++;
+
+                              index%=4;
+                                
+                              move(imgs,"left",-1020*index,10,function(){
+                                    
+                                  setA(); /*修改导航点*/
+                                 
+                              });
+                              
+
+
+
+                            },3000);
+
+                        }
+
+
+
+                          /*按钮功能*/
+                          var button1=document.getElementById("button1");
+                          var button2=document.getElementById("button2");
+                          var button3=document.getElementById("button3");
+                          
+                         function open()
+                         {
+                           window.location.href="http://sosd.fzu.edu.cn/login";
+                               
+                         }
+
+                         button1.onclick=open;
+                         button2.onclick=open;
+                         button3.onclick=open;
+
+                        
+                }
+            
+  
+        </script>
         
     </head>
 
@@ -82,7 +297,7 @@
             <div class="hd b"><a href="http://sosd.fzu.edu.cn/login?return_url=%2Fabout">关于我们</a></div>
             <div class="hd b"><a href="http://sosd.fzu.edu.cn/login?return_url=%2Fenroll">加入我们</a></div>
             <div class="hd b">
-                <input type="button" value="登录" style="width:100px; color: aliceblue;background-color:#0099FF;font-weight: bold;" >
+                <input id="button1"  type="button" value="登录" style="width:100px; color: aliceblue;background-color:#0099FF;font-weight: bold;" >
             </div> 
 
         </div> 
@@ -102,7 +317,7 @@
                    <p style="margin-left: 300px;font-size:large;">Keep tring , Keep going</p>
                 </div>
                 <div>
-                    <input type="button" value="报名校赛" style="width:200px ;height:40px;margin-left:300px;background-color: 	#4682B4 ;color:white;font-weight: bold;font-size:large;border:	#4682B4 ;">
+                    <input id="button2"  type="button" value="报名校赛" style="width:200px ;height:40px;margin-left:300px;background-color: 	#4682B4 ;color:white;font-weight: bold;font-size:large;border:	#4682B4 ;">
                 </div> 
             </div>
 
@@ -120,7 +335,7 @@
                     <div style="float: left;margin-top: 120px;text-align: left;">
                         <span style="color:	#6495ED;font-weight: bold;">&nbsp纳新通知</span>  
                         <p style="font-size:larger;font-weight: bold;margin-top: 10px;"> &nbsp实验室纳新开始啦！请有意向加入实验室的同学及时填写报名表</p>
-                        <input type="button" value="马上报名" style="color:	#4682B4;background-color: white;font-weight: bold;font-size: larger;border: thin;margin-top: 10px;">
+                        <input id="button3"  type="button" value="马上报名" style="color:	#4682B4;background-color: white;font-weight: bold;font-size: larger;border: thin;margin-top: 10px;">
                     </div>
                     <div style="float: right;margin-top: 50px;margin-right: 100px;">
                         <img src="img/news.png" alt="加载失败" style=" width: 300px;">
@@ -181,9 +396,21 @@
 
 
 
-                <div style="width: 80%;height:auto;margin: auto;"> 
-                     <img src="img/zhuo.png" alt="加载失败" width="100%" >
+                <!--轮播图-->
+                <div id="outer"> 
+                     <ul id="imgs">
+                          <li><img src="img/1.jpg" alt="加载失败"></li>
+                          <li><img src="img/2.jpg" alt="加载失败"></li>
+                          <li><img src="img/3.jpg" alt="加载失败"></li>
+                          <li><img src="img/1.jpg" alt="加载失败"></li>
+                     </ul>
+                     <div id="nav">
+                           <a href="javascript:"></a>
+                           <a href="javascript:"></a>
+                           <a href="javascript:"></a>
+                     </div>
                 </div>
+
 
 
                 <div style="color: cornflowerblue;font-weight: bold;font-size:larger;">
@@ -238,7 +465,8 @@
 
 
             </div>
-         
+            
+            
             
     </body>
 
