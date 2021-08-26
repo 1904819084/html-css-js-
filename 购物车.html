@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>购物车</title>
+
+         <script text="text/javascript">
+           
+           window.onload=function()
+           {
+
+                var  checkAll=document.getElementById("checkAll");
+                var  items=document.getElementsByName("items");
+                var  reverse=document.getElementById("reverse");
+                var  deletes=document.getElementsByName("deletes");
+                var  shuru0=document.getElementById("shuru0");
+                var  shuru1=document.getElementById("shuru1");
+                var  shuru2=document.getElementById("shuru2");
+                var  totle=document.getElementById("totle");
+                
+                var sum=0;    //存放总价
+                
+                //实现全选功能
+                checkAll.onclick=function()
+                {
+
+                     for(var i=0;i<items.length;i++)
+                     {
+                           items[i].checked=checkAll.checked;
+                     }
+
+                     //算钱
+                     if(checkAll.checked==true)
+                     {
+                         sum=shuru0.value*40+shuru1.value*50+shuru2.value*70;
+                         totle.innerHTML="合计："+sum+"元";
+
+                     }
+                     else
+                     {   
+                        sum=0; 
+                        totle.innerHTML="合计："+sum+"元";
+                     }
+
+
+                }
+
+                
+            
+                
+                /*  为单选绑定响应函数
+                    当3个全选时全选按钮亮起，反之熄灭
+                */  
+                for(var i=0;i<items.length;i++)
+                 {
+                    items[i].onclick=function()
+                    {
+                              
+                            checkAll.checked=true;
+
+                            for(j=0;j<items.length;j++)
+                            {
+                                   if(items[j].checked==false)   checkAll.checked=false;
+
+                            }
+                              
+                            //算钱
+                            if(this.checked==true)
+                            {
+                                
+                                 var  tr=this.parentNode.parentNode.parentNode
+                                 var  td1=tr.children[2];   
+                                 var  shuru=tr.children[3].children[0].children[1];
+                                
+                                 var  val=parseInt(td1.innerHTML);   //获取单价
+                                 var  m=shuru.value;                 //获取数量
+                                 sum+=val*m;                        //计算总价
+                                 totle.innerHTML="合计："+sum+"元";
+
+                            }
+                            else 
+                            {
+
+                                 var  tr=this.parentNode.parentNode.parentNode
+                                 var  td1=tr.children[2];   
+                                 var  shuru=tr.children[3].children[0].children[1];
+                                
+                                 var  val=parseInt(td1.innerHTML);   //获取单价
+                                 var  m=shuru.value;                 //获取数量
+                                 sum-=val*m;                        //计算总价
+                                 totle.innerHTML="合计："+sum+"元";
+
+                            }
+
+
+
+                    }
+
+
+                 }
+
+
+
+                //实现反选功能
+                reverse.onclick=function()
+                {
+                        for(var i=0;i<items.length;i++)
+                        {
+                            if(items[i].checked==true)  items[i].checked=false;
+                            else                     items[i].checked=true;
+                                 
+                        }
+    
+                        //控制反选对全选的影响  
+                        checkAll.checked=true;
+
+                        for(j=0;j<items.length;j++)
+                        {
+                            if(items[j].checked==false)   checkAll.checked=false;
+
+                        }
+
+
+                         
+                        //算钱
+                        sum=0;
+                        if(items[0].checked==true)
+                        {  
+                            var m=shuru0.value
+                            sum=m*40;      
+                        }
+                        if(items[1].checked==true)
+                        {  
+                            var m=shuru1.value
+                            sum+=m*50;      
+                        }
+                        if(items[2].checked==true)
+                        {  
+                            var m=shuru2.value
+                            sum+=m*70;      
+                        }
+                        totle.innerHTML="合计："+sum+"元";
+
+
+                }
+
+                
+                //实现删除功能
+                for(var i=0;i<deletes.length;i++)
+                {
+
+                      deletes[i].onclick=function()
+                      {        
+                            var tr=this.parentNode.parentNode;
+                            
+
+                            var flag=confirm("确认将其从你的购物车中删除吗？")
+
+                            //删除tr
+                            if(flag)   tr.parentNode.removeChild(tr);
+
+
+                            //算钱
+                            var  td1=tr.children[2];   
+                            var  shuru=tr.children[3].children[0].children[1];
+                                
+                            var  val=parseInt(td1.innerHTML);   //获取单价
+                            var  m=shuru.value;                 //获取数量
+                            sum-=val*m;                        //计算总价
+                            totle.innerHTML="合计："+sum+"元";
+                           
+                      }
+
+
+                }
+
+
+
+                var jians=document.getElementsByName("jians");
+                var jias=document.getElementsByName("jias");
+
+                
+                for(var i=0;i<jians.length;i++)
+                {
+                      jians[i].num=i;
+                      
+                      jians[i].onclick=function()
+                      {
+                          
+                           
+                           var shuru=document.getElementById("shuru"+this.num);
+
+                           var val=shuru.value;   //数量
+
+                           if(val>0)
+                           {
+                                val--;
+                                
+                                 //算钱
+                                if(items[this.num].checked==true)
+                                {
+                                       if(this.num==0)  sum-=40;
+                                       if(this.num==1)  sum-=50;
+                                       if(this.num==2)  sum-=70;
+                                                                
+                                }
+
+
+                           }  
+                           else   val=0;
+                           
+                           shuru.value=val;
+                             
+                           totle.innerHTML="合计："+sum+"元";
+                            
+                      }
+
+                }    
+
+
+                  
+                for(var i=0;i<jias.length;i++)
+                {
+                      jias[i].num=i;
+                      
+                      jias[i].onclick=function()
+                      {
+                           var shuru=document.getElementById("shuru"+this.num);
+
+                           var  val=shuru.value;
+                           val++;
+                            
+
+                           //算钱
+                           if(items[this.num].checked==true)
+                            {
+                                       if(this.num==0)  sum+=40;
+                                       if(this.num==1)  sum+=50;
+                                       if(this.num==2)  sum+=70;
+                                                                
+                            }
+
+                           shuru.value=val;
+
+                           totle.innerHTML="合计："+sum+"元";
+
+                      }
+                      
+                }
+                
+                
+
+                var  final=document.getElementById("final");
+
+
+                final.onclick=function()
+                {
+                    alert("你一共消费了："+sum+"元");                    
+                                   
+                }
+                   
+           }
+         
+        </script>
+
+    </head>
+    <body>
+        <h1><center>你的购物车</center></h1>
+        <table border="1px" cellspacing="2" align="center">
+            <tr>
+                <td><input type="checkbox" id="checkAll">全选</td>
+                <td>商品名称</td>
+                <td>单价</td>
+                <td><center>数量</center></td>  
+                <td>操作</td>
+            </tr>
+             
+            <tr>
+               <td><center><input type="checkbox" name="items"></center></td>
+               <td>足球</td>
+               <td>40元</td>
+               <td style="width:100px ;"> 
+                   <center>
+                   <button name="jians" style="width: 25px">-</button>
+                   <input id="shuru0" type="text" value="1" style="width:30px;text-align: center;">
+                   <button name="jias" style="width: 25px">+</button>
+                   </center>
+               </td>
+               <td><button name="deletes" style="background-color: yellowgreen;color: white;">删除</button></td>
+            </tr>
+
+            <tr>
+                <td><center><input type="checkbox" name="items"></center></td>
+                <td>篮球</td>
+                <td>50元</td>
+                <td style="width:100px ;"> 
+                    <center>
+                    <button name="jians" style="width: 25px">-</button>
+                    <input id="shuru1" type="text" value="1" style="width:30px;text-align: center;">
+                    <button name="jias" style="width: 25px">+</button>
+                    </center>
+                </td>
+                <td><button name="deletes" style="background-color: yellowgreen;color: white;">删除</button></td>
+             </tr>
+
+             <tr>
+                <td><center><input type="checkbox" name="items"></center></td>
+                <td>羽毛球</td>
+                <td>70元</td>
+                <td style="width:100px ;"> 
+                    <center>
+                    <button name="jians" style="width: 25px">-</button>
+                    <input id="shuru2" type="text" value="1" style="width:30px;text-align: center;">
+                    <button name="jias" style="width: 25px">+</button>
+                    </center>
+                </td>
+                <td><button name="deletes" style="background-color: yellowgreen;color: white;">删除</button></td>
+             </tr>
+              
+
+            <tr>
+               <td><input type="checkbox" id="reverse">反选</td>
+               <td colspan=3><span id="totle">合计：0元</span></td>
+               <td><button id="final" style="background-color: red; color:white;">结算</button></td>
+            </tr>
+
+
+        </table>
+
+    </body>
+</html>
