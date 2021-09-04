@@ -76,7 +76,7 @@
                 <tbody align="center">
                     <tr v-for="item in search(keywords)" :key="item.ID"> 
                         <td style="width: 10%;">{{item.ID}}</td>
-                        <td style="width: 20%;">{{item.Time}}</td>
+                        <td style="width: 20%;">{{item.Time |change}}</td>
                         <td>{{item.Content}}</td>
                         <td style="width: 10%;"><a href="" @click.prevent=del(item.ID)>删除</a></td>
                     </tr>
@@ -94,7 +94,7 @@
 
 
     <script>
-        
+     
         var vm=new Vue({
 
             el:"#app",
@@ -165,7 +165,7 @@
                        
                          var newlist=[];
 
-
+                         
                          this.list.forEach(element => {
                              
                                if(element.Content.indexOf(keywords)!=-1)
@@ -178,13 +178,37 @@
 
                           return newlist;
 
-                  }
+                  },
+
+                 
 
 
+            },
+
+            filters:
+            {
+
+                change: function(data)
+                        {
+
+                            var dt=new Date(data)
+
+                            var y=dt.getFullYear()
+                            var m=dt.getMonth()+1
+                            var d=dt.getDate()
+                            var h=dt.getHours()
+                            var mm=dt.getMinutes()
+                            var s=dt.getSeconds() 
+
+                           
+                            return   y+'-'+m+'-'+d+' '+h+':'+mm+':'+s;
+
+                        }
+                   
 
 
-            }
-
+            },
+            
 
         })
 
