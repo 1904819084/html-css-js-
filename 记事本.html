@@ -53,9 +53,10 @@
                 <div id="middle" >
                         <div class="side" ></div>
                         <div id="shuru" style="height:80px ;line-height:80px;">  
-                            <label>Content:<input type="text" style="width: 20%" v-model="Content"></label>
+                            <label>Content:<input type="text" style="width: 20%;border-radius:5px;" v-model="Content" @keyup.enter="add"></label>
                             <input type="button" value="添加" style="width:10%;background-color: lightskyblue;color: white;" @click="add">
-                            <label>搜索内容中的关键字：<input type="text" style="width: 20%" v-model="keywords"></label>  
+                            <label>搜索内容中的关键字：<input type="text" style="width: 20%;border-radius:5px;" v-model="keywords" v-focus v-color="'red'">
+                            </label>  
                         </div>
                         <div class="side"></div>
                 </div>
@@ -194,17 +195,46 @@
                             var dt=new Date(data)
 
                             var y=dt.getFullYear()
-                            var m=dt.getMonth()+1
-                            var d=dt.getDate()
-                            var h=dt.getHours()
-                            var mm=dt.getMinutes()
-                            var s=dt.getSeconds() 
+                            var m=(dt.getMonth()+1).toString().padStart(2,'0')
+                            var d=(dt.getDate()).toString().padStart(2,'0')
+                            var h=(dt.getHours()).toString().padStart(2,'0')
+                            var mm=(dt.getMinutes()).toString().padStart(2,'0')
+                            var s=(dt.getSeconds()).toString().padStart(2,'0') 
 
                            
                             return   y+'-'+m+'-'+d+' '+h+':'+mm+':'+s;
 
                         }
                    
+
+
+            },
+
+            directives:
+            {
+                 
+                  focus:
+                  {
+                      inserted:function(el)
+                        {
+                              el.focus()                           
+                        }
+
+                  },
+
+
+                  color:
+                  {
+
+                      bind:function(el,binding)
+                      {
+                            el.style.color=binding.value
+                      }
+
+
+
+                  }
+
 
 
             },
